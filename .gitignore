@@ -1,3 +1,4 @@
 datasets
 anno
 outputs
+wsod/models/backbones/vggm1024-caffe.pt
