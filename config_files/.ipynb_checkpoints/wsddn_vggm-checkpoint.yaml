@@ -1,0 +1,95 @@
+OUTPUT_DIR: "outputs/wsddn_vggm"
+
+MODEL:
+  DEVICE: "cuda"
+
+  META_ARCHITECTURE: "GeneralisedMIL"
+  
+  LOAD_PROPOSALS: True
+  PROPOSAL_GENERATOR:
+    MIN_SIZE: 20
+
+  PIXEL_MEAN: (103.530, 116.280, 123.675)  #BGR
+  PIXEL_STD: (1.0, 1.0, 1.0)  # Caffe doesn't normalize std
+  
+  BACKBONE:
+    NAME: "vggm"
+    WEIGHTS: "imagenet"
+    FREEZE_CONVS: 0
+
+  ROI_HEADS:
+    NUM_CLASSES: 20
+    NMS_THRESH_TEST: 0.3
+    SCORE_THRESH_TEST: 1e-3
+
+  ROI_BOX_HEAD:
+    POOLER_TYPE: "ROIPool"
+    POOLER_RESOLUTION: 6
+
+  MIDN_HEAD:
+    NUM_CLASSIFIER: 1
+    NUM_DETECTOR: 1
+    DETECTOR_TEMP: 2.0
+
+  REFINEMENT_HEAD:
+    K: 0
+
+  LOSS_FN: "wsddn_loss"
+
+DATALOADER:
+  SAMPLER_TRAIN: "TrainingSampler"
+  NUM_WORKERS: 4
+
+DATASETS:
+  TRAIN: ("voc_2007_trainval",)
+  PROPOSAL_FILES_TRAIN: ("anno/proposals_trainval.pkl",)
+  PRECOMPUTED_PROPOSAL_TOPK_TRAIN: 5000
+
+  TEST: ("voc_2007_test",)
+  PROPOSAL_FILES_TEST: ('anno/proposals_test.pkl',)
+  PRECOMPUTED_PROPOSAL_TOPK_TEST: 5000
+
+INPUT:
+  FORMAT: "BGR"
+  MIN_SIZE_TRAIN: (480, 576, 688, 864, 1200)
+  MAX_SIZE_TRAIN: 2000
+  MIN_SIZE_TRAIN_SAMPLING: "choice"
+  MIN_SIZE_TEST: 0
+  MAX_SIZE_TEST: 0
+
+TEST:
+  EVAL_PERIOD: 0
+  DETECTIONS_PER_IMAGE: 100
+  AUG:
+    ENABLED: True
+    MIN_SIZES: (480, 576, 688, 864, 1200)
+    MAX_SIZE: 2000
+    FLIP: True
+
+SOLVER:
+  # Mixed Precision
+  MIXED_PRECISION: True
+  LOSS_SCALE: 0.0
+
+  # Minibatch settings
+  IMS_PER_BATCH: 1
+  ITER_SIZE: 1
+
+  # Optimizer settings
+  TYPE: 'caffesgd'
+  BASE_LR: 1e-5
+  WEIGHT_DECAY: 5e-4
+  BIAS_LR_FACTOR: 2.0
+  WEIGHT_DECAY_BIAS: 0.0
+  MOMENTUM: 0.9
+  
+  # Scheduler
+  LR_SCHEDULER_NAME: "CaffeLRScheduler"
+  STEPS: (50110,)
+  GAMMA: 0.1
+  WARMUP_FACTOR: 1.
+  WARMUP_ITERS: 0
+  
+  # Other
+  MAX_ITER: 100220
+  CHECKPOINT_PERIOD: 5000
