@@ -8,6 +8,7 @@ My implementations of a variety of algorithms and models for the weakly supervis
 - Detectron2
 
 ## Models implemented in this repository
-- [Weakly Supervised Deep Detection Networks (Bilen et. al., 2015)](https://arxiv.org/abs/1511.02853)
-- [Multiple Instance Detection Network with Online Instance Classifier Refinement (Tang et. al., 2017)](https://arxiv.org/abs/1704.00138)
-- [PCL: Proposal Cluster Learning for Weakly Supervised Object Detection (Tang et. al., 2018)](https://arxiv.org/abs/1807.03342)
+Below are the models currently implemented in this repository, as well as their performance using VGG16 as a backbone.
+- [Weakly Supervised Deep Detection Networks (Bilen et. al., 2015)](https://arxiv.org/abs/1511.02853) (26.17, no spatial regularisation)
+- [Multiple Instance Detection Network with Online Instance Classifier Refinement (Tang et. al., 2017)](https://arxiv.org/abs/1704.00138) (40.83)
+- [PCL: Proposal Cluster Learning for Weakly Supervised Object Detection (Tang et. al., 2018)](https://arxiv.org/abs/1807.03342) (44.21)
